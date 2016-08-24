@@ -8,11 +8,32 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_scrolling">
+<RelativeLayout
+    android:layout_margin="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
+    <EditText
+        android:layout_width="match_parent"
+        android:hint="Title..."
+        android:layout_height="match_parent"
+        android:id="@+id/etTitle"
+        />
+
+    <EditText
+        android:layout_below="@+id/etTitle"
+        android:layout_width="match_parent"
+        android:hint="Description..."
+        android:layout_height="match_parent"
+        android:id="@+id/etDescription"
+        />
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text"/>
-
+        android:text="Save"
+        android:onClick="saveTodo"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/etDescription"
+        />
+</RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

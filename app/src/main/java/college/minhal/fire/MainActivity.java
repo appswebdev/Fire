@@ -7,13 +7,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
 
+    EditText etTitle;
+    EditText etDescription;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
         testLogin();
 
-
+        etTitle = (EditText) findViewById(R.id.etTitle);
+        etDescription = (EditText) findViewById(R.id.etDescription);
 
 
     }
@@ -41,6 +48,10 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     Intent intent = new Intent(MainActivity.this,
                             LoginActivity.class);
+                    intent.setFlags(
+                            Intent.FLAG_ACTIVITY_NEW_TASK|
+                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    );
                     startActivity(intent);
                 }
             }
@@ -62,9 +73,30 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
+            FirebaseAuth.getInstance().signOut();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void saveTodo(View view) {
+
+        //Get A Reference to the database:
+        DatabaseReference dbRef = FirebaseDatabase.
+                getInstance().getReference();
+
+        //init a todos that we want to save
+        Todo todo = new Todo(
+                etTitle.getText().toString(),
+                etDescription.getText().toString()
+        );
+
+        //Save the todo into the database under Todos Table
+        dbRef.child("Todos").push().setValue(todo);
+              /*Push adds a new row*/
+        etTitle.setText("");
+        etDescription.setText("");
+
     }
 }
