@@ -4,16 +4,16 @@
       tools:context=".MainActivity">
 
     <item android:id="@+id/action_list_todos"
-          android:listName="List"
+          android:title="List"
           android:icon="@mipmap/ic_launcher"
           app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:listName="@string/action_settings"
+        android:title="@string/action_settings"
         app:showAsAction="never"/>
 
-    <item android:listName="Sign Out"
+    <item android:title="Sign Out"
           app:showAsAction="never"
           android:id="@+id/action_logout"/>
 </menu>
