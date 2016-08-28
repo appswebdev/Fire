@@ -22,15 +22,16 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
 
     //auth
-    compile 'com.google.firebase:firebase-auth:9.4.0'
     //analytics
-    compile 'com.google.firebase:firebase-core:9.4.0'
     //database
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.google.firebase:firebase-auth:9.4.0'
+    compile 'com.google.firebase:firebase-core:9.4.0'
     compile 'com.google.firebase:firebase-database:9.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
 }
 
 // Add to the bottom of the file
