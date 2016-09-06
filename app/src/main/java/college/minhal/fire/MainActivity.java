@@ -18,6 +18,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import college.minhal.fire.models.ShoppingList;
+
 public class MainActivity extends BaseActivity {
     Button btnSave;
     EditText etTitle;
@@ -31,6 +33,8 @@ public class MainActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         testLogin();
         findViews();
+
+        //FirebaseDatabase.getInstance().getReference().onDisconnect().updateChildren(//)
     }
 
     private void findViews() {

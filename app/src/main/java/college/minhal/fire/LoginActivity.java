@@ -13,6 +13,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
+
+import college.minhal.fire.models.ShoppingList;
+import college.minhal.fire.models.User;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -53,6 +57,11 @@ public class LoginActivity extends AppCompatActivity {
                 addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                     @Override
                     public void onSuccess(AuthResult authResult) {
+                        //Save the user:
+                        String uid = authResult.getUser().getUid();
+                        User u = new User(getEmail().split("@")[0], getEmail());
+                        FirebaseDatabase.getInstance().getReference().
+                                child("Users").child(uid).setValue(u);
                         gotoMain();
                     }
                 })
@@ -65,6 +74,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     ProgressDialog dialog;
+
     private void showProgress() {
         if (dialog == null) {
             dialog = new ProgressDialog(this);
@@ -94,9 +104,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void gotoMain() {
         hideProgress();
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ShoppingListsActivity.class);
         intent.setFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK|
+                Intent.FLAG_ACTIVITY_NEW_TASK |
                         Intent.FLAG_ACTIVITY_CLEAR_TASK
         );
         startActivity(intent);
