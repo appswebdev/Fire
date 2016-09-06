@@ -38,50 +38,30 @@ public class ShoppingListsActivity extends BaseActivity {
                 getReference().child("ShoppingLists").child(getUserID());
 
         shoppingLists = new ArrayList<ShoppingList>();
-
+        initRecycler();
         updateData(ref);
-
-        //Fetch data ONCE, if changed? Fetch again.
-        /*
-        ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                shoppingLists.clear();
-                for (DataSnapshot child : dataSnapshot.getChildren()) {
-                    ShoppingList list = child.getValue(ShoppingList.class);
-                    shoppingLists.add(list);
-                }
-                initRecycler();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        */
-
-
     }
 
-
-    private int getPositionForKey(String key){
-        for (int i = 0; i < shoppingSnapshots.size(); i++) {
-            DataSnapshot s = shoppingSnapshots.get(i);
-            if (s.getKey().equals(key)){
-                return i;
-            }
-        }
-       throw new IllegalArgumentException("No Key found in the list");
-    }
-    private void updateData(DatabaseReference ref) {
-
+    private void initRecycler() {
         RecyclerView rvShoppingLists = (RecyclerView) findViewById(R.id.rvShoppingList);
+        assert rvShoppingLists != null;
         rvShoppingLists.setLayoutManager(new LinearLayoutManager(this));
         adapter = new ShoppingListsAdapter(shoppingSnapshots, this);
         rvShoppingLists.setAdapter(adapter);
+    }
 
 
+    private int getPositionForKey(String key) {
+        for (int i = 0; i < shoppingSnapshots.size(); i++) {
+            DataSnapshot s = shoppingSnapshots.get(i);
+            if (s.getKey().equals(key)) {
+                return i;
+            }
+        }
+        throw new IllegalArgumentException("No Key found in the list");
+    }
+
+    private void updateData(DatabaseReference ref) {
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -117,15 +97,6 @@ public class ShoppingListsActivity extends BaseActivity {
         });
     }
 
- /*   private void initRecycler() {
-        RecyclerView rvShoppingList = (RecyclerView) findViewById(R.id.rvShoppingList);
-        assert rvShoppingList != null;
-        rvShoppingList.setAdapter(new ShoppingListsAdapter(shoppingLists, ShoppingListsActivity.this));
-        rvShoppingList.setLayoutManager(new LinearLayoutManager(ShoppingListsActivity.this));
-
-    }*/
-
-
     private void testLogin() {
         FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
@@ -147,16 +118,6 @@ public class ShoppingListsActivity extends BaseActivity {
             }
         });
     }
-
-/*
-
-    private void initRecycler(ArrayList<ShoppingList> shoppingLists) {
-        RecyclerView rvShoppingList = (RecyclerView) findViewById(R.id.rvShoppingList);
-        ShoppingListsAdapter adapter = new ShoppingListsAdapter(shoppingLists, this);
-        rvShoppingList.setLayoutManager(new LinearLayoutManager(this));
-        rvShoppingList.setAdapter(adapter);
-    }
-*/
 
     public void showAddList(View view) {
         AddNewListFragment dialog = new AddNewListFragment();
