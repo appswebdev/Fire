@@ -1,4 +1,4 @@
-package college.minhal.fire;
+package college.minhal.fire.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
-import college.minhal.fire.models.ShoppingList;
+import college.minhal.fire.R;
 import college.minhal.fire.models.User;
 
 public class LoginActivity extends AppCompatActivity {

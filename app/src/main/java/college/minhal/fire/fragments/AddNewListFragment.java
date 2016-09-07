@@ -1,4 +1,4 @@
-package college.minhal.fire;
+package college.minhal.fire.fragments;
 
 
 
@@ -17,6 +17,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
+import college.minhal.fire.R;
 import college.minhal.fire.models.ShoppingList;
 import mehdi.sakout.fancybuttons.FancyButton;
 

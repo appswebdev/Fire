@@ -7,7 +7,7 @@
     android:minWidth="400dp"
     android:minHeight="200dp"
     android:layout_margin="16dp"
-    tools:context="college.minhal.fire.AddNewListFragment">
+    tools:activity=".fragments.AddNewListFragment">
 
     <android.support.design.widget.TextInputLayout
         android:layout_margin="20dp"

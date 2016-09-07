@@ -1,18 +1,20 @@
-package college.minhal.fire;
+package college.minhal.fire.adapters;
 
-import android.content.Context;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 
+import college.minhal.fire.R;
+import college.minhal.fire.fragments.ListItemsFragment;
 import college.minhal.fire.models.ShoppingList;
 
 /**
@@ -22,21 +24,21 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
     private final LayoutInflater inflater;
     private final ArrayList<DataSnapshot> shoppingSnapshots;
     // private ArrayList<ShoppingList> shoppingLists;
-    private Context context;
+    private FragmentActivity activity;
 
     //Constructor:
 /*
-    public ShoppingListsAdapter(ArrayList<ShoppingList> shoppingLists, Context context) {
+    public ShoppingListsAdapter(ArrayList<ShoppingList> shoppingLists, Context activity) {
         //this.shoppingLists = shoppingLists;
-        this.context = context;
-        this.inflater = LayoutInflater.from(context);
+        this.activity = activity;
+        this.inflater = LayoutInflater.from(activity);
     }
 */
 
-    public ShoppingListsAdapter(ArrayList<DataSnapshot> shoppingSnapshots, Context context) {
-        this.context = context;
+    public ShoppingListsAdapter(ArrayList<DataSnapshot> shoppingSnapshots, FragmentActivity activity) {
+        this.activity = activity;
         this.shoppingSnapshots = shoppingSnapshots;
-        this.inflater = LayoutInflater.from(context);
+        this.inflater = LayoutInflater.from(activity);
     }
 
     @Override
@@ -56,13 +58,18 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
             ShoppingListViewHolder holder,
             int position) {
         //Get the data at the position:
-        final ShoppingList t = shoppingSnapshots.get(position).getValue(ShoppingList.class);
+        final DataSnapshot snapshot = shoppingSnapshots.get(position);
+        final ShoppingList list = snapshot.getValue(ShoppingList.class);
         //bind the data to the Views in the viewHolder
-        holder.tvListName.setText(t.getListName());
+        holder.tvListName.setText(list.getListName());
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, t.toString(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(activity, t.toString(), Toast.LENGTH_SHORT).show();
+                activity.getSupportFragmentManager().beginTransaction().
+                        replace(R.id.container, ListItemsFragment.newInstance(snapshot.getKey(), list)).
+                        addToBackStack("List").
+                        commit();
             }
         });
     }

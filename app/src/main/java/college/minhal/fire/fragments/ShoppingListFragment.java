@@ -1,4 +1,4 @@
-package college.minhal.fire;
+package college.minhal.fire.fragments;
 
 
 import android.content.Intent;
@@ -22,6 +22,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+import college.minhal.fire.R;
+import college.minhal.fire.adapters.ShoppingListsAdapter;
+import college.minhal.fire.activities.LoginActivity;
 import college.minhal.fire.models.ShoppingList;
 
 
@@ -29,7 +32,7 @@ import college.minhal.fire.models.ShoppingList;
  * A simple {@link Fragment} subclass.
  */
 public class ShoppingListFragment extends Fragment {
-    private ArrayList<ShoppingList> shoppingLists;
+
     private ArrayList<DataSnapshot> shoppingSnapshots = new ArrayList<>();
     private ShoppingListsAdapter adapter;
 
@@ -50,7 +53,6 @@ public class ShoppingListFragment extends Fragment {
         DatabaseReference ref = FirebaseDatabase.getInstance().
                 getReference().child("ShoppingLists").child(getUserID());
 
-        shoppingLists = new ArrayList<>();
         initRecycler(v);
         updateData(ref);
 
@@ -62,7 +64,7 @@ public class ShoppingListFragment extends Fragment {
         RecyclerView rvShoppingLists = (RecyclerView) v.findViewById(R.id.rvShoppingList);
         assert rvShoppingLists != null;
         rvShoppingLists.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new ShoppingListsAdapter(shoppingSnapshots, getContext());
+        adapter = new ShoppingListsAdapter(shoppingSnapshots, getActivity());
         rvShoppingLists.setAdapter(adapter);
     }
 

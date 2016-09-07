@@ -1,4 +1,4 @@
-package college.minhal.fire;
+package college.minhal.fire.activities;
 
 import android.app.ProgressDialog;
 import android.support.design.widget.Snackbar;
