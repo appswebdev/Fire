@@ -4,6 +4,7 @@ package college.minhal.fire.fragments;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -35,6 +36,7 @@ public class ShoppingListFragment extends Fragment {
 
     private ArrayList<DataSnapshot> shoppingSnapshots = new ArrayList<>();
     private ShoppingListsAdapter adapter;
+    private FloatingActionButton fabAddList;
 
 
     public ShoppingListFragment() {
@@ -53,6 +55,14 @@ public class ShoppingListFragment extends Fragment {
         DatabaseReference ref = FirebaseDatabase.getInstance().
                 getReference().child("ShoppingLists").child(getUserID());
 
+        fabAddList = (FloatingActionButton)v.findViewById(R.id.fabAddList);
+
+        fabAddList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showAddList(view);
+            }
+        });
         initRecycler(v);
         updateData(ref);
 

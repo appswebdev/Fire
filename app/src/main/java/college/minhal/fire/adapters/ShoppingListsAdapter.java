@@ -1,7 +1,6 @@
 package college.minhal.fire.adapters;
 
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +45,7 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
     onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = inflater.
-                inflate(R.layout.shipping_lists_item,
+                inflate(R.layout.shopping_list,
                         parent,
                         false);
 
