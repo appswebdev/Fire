@@ -1,9 +1,12 @@
 package college.minhal.fire.fragments;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,6 +40,7 @@ public class ShoppingListFragment extends Fragment {
     private ArrayList<DataSnapshot> shoppingSnapshots = new ArrayList<>();
     private ShoppingListsAdapter adapter;
     private FloatingActionButton fabAddList;
+    private View view;
 
 
     public ShoppingListFragment() {
@@ -49,29 +53,41 @@ public class ShoppingListFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_shopping_list, container, false);
+        this.view = v;
 
-        testLogin();
 
+        return v;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        init();
+    }
+
+    void init() {
         DatabaseReference ref = FirebaseDatabase.getInstance().
                 getReference().child("ShoppingLists").child(getUserID());
 
-        fabAddList = (FloatingActionButton)v.findViewById(R.id.fabAddList);
-
+        fabAddList = (FloatingActionButton) view.findViewById(R.id.fabAddList);
         fabAddList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showAddList(view);
             }
         });
-        initRecycler(v);
+        initRecycler();
         updateData(ref);
-
-        return v;
     }
 
-
-    private void initRecycler(View v) {
-        RecyclerView rvShoppingLists = (RecyclerView) v.findViewById(R.id.rvShoppingList);
+    private void initRecycler( ) {
+        RecyclerView rvShoppingLists = (RecyclerView) view.findViewById(R.id.rvShoppingList);
         assert rvShoppingLists != null;
         rvShoppingLists.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ShoppingListsAdapter(shoppingSnapshots, getActivity());
@@ -90,6 +106,7 @@ public class ShoppingListFragment extends Fragment {
     }
 
     private void updateData(DatabaseReference ref) {
+        shoppingSnapshots.clear();
         ref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
@@ -125,27 +142,7 @@ public class ShoppingListFragment extends Fragment {
         });
     }
 
-    private void testLogin() {
-        FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                if (currentUser != null) {
-                    Toast.makeText(getContext(), "Hello, "
-                                    + currentUser.getEmail(),
-                            Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intent = new Intent(getContext(),
-                            LoginActivity.class);
-                    intent.setFlags(
-                            Intent.FLAG_ACTIVITY_NEW_TASK |
-                                    Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    );
-                    startActivity(intent);
-                }
-            }
-        });
-    }
+
 
     public void showAddList(View view) {
         AddNewListFragment dialog = new AddNewListFragment();
