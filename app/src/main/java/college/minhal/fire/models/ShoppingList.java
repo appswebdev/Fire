@@ -34,4 +34,9 @@ public class ShoppingList {
     public void setOwner(String owner) {
         this.owner = owner;
     }
+
+    @Override
+    public String toString() {
+        return   listName ;
+    }
 }

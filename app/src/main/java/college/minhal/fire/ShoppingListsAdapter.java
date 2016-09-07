@@ -5,7 +5,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 
@@ -31,7 +33,7 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
     }
 */
 
-    public ShoppingListsAdapter(ArrayList<DataSnapshot> shoppingSnapshots, ShoppingListsActivity context) {
+    public ShoppingListsAdapter(ArrayList<DataSnapshot> shoppingSnapshots, Context context) {
         this.context = context;
         this.shoppingSnapshots = shoppingSnapshots;
         this.inflater = LayoutInflater.from(context);
@@ -54,9 +56,15 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
             ShoppingListViewHolder holder,
             int position) {
         //Get the data at the position:
-        ShoppingList t = shoppingSnapshots.get(position).getValue(ShoppingList.class);
+        final ShoppingList t = shoppingSnapshots.get(position).getValue(ShoppingList.class);
         //bind the data to the Views in the viewHolder
         holder.tvListName.setText(t.getListName());
+        holder.layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(context, t.toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -69,10 +77,12 @@ public class ShoppingListsAdapter extends RecyclerView.Adapter<ShoppingListsAdap
 
     class ShoppingListViewHolder extends RecyclerView.ViewHolder {
         TextView tvListName;
+        RelativeLayout layout;
 
         public ShoppingListViewHolder(View v) {
             super(v);
             tvListName = (TextView) v.findViewById(R.id.tvListName);
+            layout = (RelativeLayout) v.findViewById(R.id.layout);
         }
     }
 }
