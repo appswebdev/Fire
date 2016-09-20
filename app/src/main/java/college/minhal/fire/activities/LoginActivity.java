@@ -33,6 +33,10 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void login(final View view) {
+        if (!validate()) {
+            return;
+        }
+
         showProgress();
         FirebaseAuth.getInstance().
                 signInWithEmailAndPassword(getEmail(), getPassword())
@@ -50,7 +54,28 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    private boolean validate() {
+
+        boolean isValid = true;
+        if (getEmail() == null || getEmail().isEmpty()) {
+            etEmail.setError("Email Must not be empty");
+            isValid = false;
+        } else if (getEmail() != null && !getEmail().contains("@")) {
+            etEmail.setError("Email Must contain @");
+            isValid = false;
+        }
+
+        if (getPassword() == null ||getPassword().length() < 6) {
+            etPassword.setError("Password must contain at least 6 characters");
+            isValid = false;
+        }
+
+        return isValid;
+    }
+
     public void register(final View view) {
+        if (!validate())
+            return;
         showProgress();
         FirebaseAuth.getInstance().
                 createUserWithEmailAndPassword(getEmail(), getPassword()).
@@ -90,7 +115,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    private void showError(Exception e, View view) {
+    private void showError(Exception e, View view ) {
         hideProgress();
         Snackbar.make(view,
                 e.getLocalizedMessage(),
