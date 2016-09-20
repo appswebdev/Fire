@@ -3,10 +3,6 @@
       xmlns:tools="http://schemas.android.com/tools"
       tools:activity=".activities.MainActivity">
 
-    <item android:id="@+id/action_list_todos"
-          android:title="List"
-          android:icon="@mipmap/ic_launcher"
-          app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"

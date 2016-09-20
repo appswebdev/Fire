@@ -25,6 +25,7 @@ public class MainActivity extends BaseActivity {
     Button btnSave;
     EditText etTitle;
     EditText etDescription;
+    boolean isFirst = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +50,8 @@ public class MainActivity extends BaseActivity {
         FirebaseAuth.getInstance().addAuthStateListener(new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                if (currentUser != null) {
+                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+                if (currentUser != null && isFirst) {
                     Toast.makeText(MainActivity.this, "Hello, "
                                     + currentUser.getEmail(),
                             Toast.LENGTH_SHORT).show();
@@ -85,10 +86,6 @@ public class MainActivity extends BaseActivity {
         switch (id) {
             case R.id.action_logout:
                 FirebaseAuth.getInstance().signOut();
-                return true;
-            case R.id.action_list_todos:
-                Intent intent = new Intent(this, ShoppingListsActivity.class);
-                startActivity(intent);
                 return true;
         }
         return super.onOptionsItemSelected(item);
