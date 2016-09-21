@@ -35,11 +35,16 @@ public class MyStartedService extends Service {
         };
 
         new AsyncTask() {
+            int counter = 0;
             @Override
             protected Object doInBackground(Object[] objects) {
+                while (counter<1000){
+
+                    counter++;
+                }
                 return null;
             }
-        };
+        }.execute();
 
 
         return START_REDELIVER_INTENT;
