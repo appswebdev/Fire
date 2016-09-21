@@ -10,6 +10,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -19,6 +24,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -27,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import college.minhal.fire.R;
 import college.minhal.fire.models.User;
 
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final int REQUEST_CODE_GOOGLE = 12;
@@ -34,6 +41,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText etPassword;
     private GoogleApiClient mGoogleApiClient;
     private View btnGoogle;
+    LoginButton btnFacebook;
+    private CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +51,48 @@ public class LoginActivity extends AppCompatActivity {
 
         etEmail = (EditText) findViewById(R.id.etEmail);
         etPassword = (EditText) findViewById(R.id.etPassword);
+
+
+        callbackManager = CallbackManager.Factory.create();
+
+        btnFacebook = (LoginButton) findViewById(R.id.btnFacebookLogin);
+        assert btnFacebook != null;
+        btnFacebook.setReadPermissions("public_profile", "email");
+
+        btnFacebook.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                String token = loginResult.getAccessToken().getToken();
+                AuthCredential credential = FacebookAuthProvider.getCredential(token);
+
+                FirebaseAuth.getInstance().signInWithCredential(credential).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        FirebaseUser currentUser = authResult.getUser();
+                        User userModel = new User(currentUser.getDisplayName(), currentUser.getEmail());
+                        Toast.makeText(LoginActivity.this, userModel.toString(), Toast.LENGTH_SHORT).show();
+                        gotoMain();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        showError(e, btnFacebook);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                showError(error, btnFacebook);
+            }
+        });
+
 
         btnGoogle = findViewById(R.id.btnGoogleLogin);
         assert btnGoogle != null;
@@ -99,6 +150,9 @@ public class LoginActivity extends AppCompatActivity {
             });
 
 
+
+        }else {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
         }
     }
 
